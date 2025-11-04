@@ -1,0 +1,288 @@
+---
+title: "Data types in R"
+author: "ANNETTE MUTHONDU/C029/404217/2024"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+# Introduction
+
+Everything in the R programming language is an object.  
+When we talk about data types in R, we refer to the simplest data objects we can handle — also known as R atomic data types.
+
+## Atomic Data Types
+
+Atomic data types are the object types which you can create (atomic) vectors.
+
+- Numeric: integer and double (real)  
+- Character  
+- Logical 
+- Complex
+- Raw  
+
+You can check if any data object is atomic with the is.atomic() function.  
+This function checks for the data type of atomic vectors.
+
+```{r}
+is.atomic(3)  # Check if numeric value 3 is atomic
+is.atomic("R CODER")  # Check if character string is atomic
+```
+
+## Check data type in R
+
+There are several functions that can show you the data type of an R object, such as `typeof,mode,storage.mode,class` and `str`.
+
+```{r}
+typeof(1)         #"double"
+class(2)         #"numeric"
+storage.mode(3)  #"double"
+mode(4)          #"numeric"
+str(5)           # num 5
+```
+
+However, the main use of some of them is not to just check the data type of an R object.for instance, the class of an R object can be different from the data type (which is very useful when creating S3 classes) and the `str` function is designed to show the full structure of an object. If you want to print the R data type,We recommend** using the `typeof` function.
+
+```{r}
+x<-1
+class(x)   #"numeric"
+
+class(x) <- "My_class"
+class(x)   #"My_class"
+
+typeof(x)  #"double"
+```
+
+To summarize, the following table show the differences of the possible outputs when applying:`typeof,storage.modeandmode`functions.
+
+## Comparison of typeof, storage.mode, and mode in R
+
+| typeof   | storage.mode | mode     |
+|-----------|---------------|----------|
+| logical   | logical       | logical  |
+| integer   | numeric       | integer  |
+| double    | numeric       | double   |
+| complex   | complex       | complex  |
+| character | character     | character|
+| raw       | raw           | raw      |
+
+There are other functions that allow you to check if the some object belongs to some data type, returning `TRUE` or `FALSE`. As a rule, these functions start with `is`. Followed by the data type. We will review all of them in the following sections.
+
+## Numeric Data Types
+
+The numeric data type in R is composed by double (real)and integer data types. You can check  if an object is numeric with the `mode` function or if the `is.numeric` function returns `TRUE`
+
+```{r}
+mode(55)        #"numeric"
+
+is.numeric(3)   #TRUE
+```
+
+### Double or real data type
+
+The double data type in R is the representation of a double-precision numeric object.
+Note that, by default, all numbers are double in R and that `inf`, -inf,NaN`,the scientific and hexadecimal notation of numbers are also doubles.
+
+```{r}
+typeof(2)      #"double"
+
+#infinite
+
+typeof(Inf)   #"double"
+
+typeof(-Inf)  #"double"
+
+#Not a number
+
+typeof(NaN)    #"double"
+
+#Scientific
+
+typeof(3.12e3)  #"double"
+
+#Hexadecimal
+
+typeof(0xbade) #"double"
+
+```
+If you want to check if an object is a double,you can use the `is.double` function.
+
+```{r}
+
+is.double(2)# TRUE
+is.double(2.8)# TRUE
+
+```
+
+### Integer data type
+
+The integer data type can be created adding an `L` to a number. This data type is useful if you want to pass some R object to a *c* or *FORTRAN* function that expects an integer value, so this data type it is not generally needed. You can check the data type with the `is.integer` function 
+
+```{r}
+y <- 2L
+typeof(y)        # "integer"
+
+is.integer(3)    # FALSE
+is.integer(3L)   # TRUE
+```
+
+## Logical data type
+
+The boolean  or logical data type is composed by `TRUE`, `FALSE`, and `NA` values.
+```{r}
+t <- TRUE
+f <- FALSE
+n <- NA
+
+
+typeof(t)    # "logical"
+typeof(f)    # "logical"
+typeof(n)    # "logical"
+```
+
+In addition, the function that checks whether an object is logical or not is `is.logical`.
+```{r}
+is.logical(T)      # TRUE
+is.logical(TRUE)   # TRUE
+```
+
+**Warning:** Note that you can use `T` and `F` instead of `TRUE` or `FALSE`.
+However, it is not recommended, because you could accidentally override `T` or `F`,
+but not `TRUE` or `FALSE`, as shown in the following example:
+```{r}
+T <- "Hello"
+T          # "Hello"
+is.logical(T)  # FALSE
+
+TRUE       # TRUE
+is.logical(TRUE) # TRUE
+```
+
+## Complex data type
+
+The complex data type is an object that includes an imaginary number (i).  
+As imaginary numbers are not generally used in statistics, this data type is not very common.  
+The function to check the data type is is.complex.
+
+```{r}
+1 + 3i
+
+typeof(1 + 3i)       # "complex"
+is.complex(1 + 3i)   # TRUE
+```
+
+## String or character data type
+
+Character strings are symbols, letters, words, or phrases inside double or single quotation marks.
+With this in mind, you can verify that some object is of type character using the `is.character` function.
+```{r}
+character <- "a"
+
+typeof(character)        # "character"
+is.character(character)  # TRUE
+```
+
+Note that using single or double quotation marks is equivalent.
+```{r}
+typeof('R CODER')   # "character"
+
+```
+It is worth mentioning that the nchar function counts the number of characters inside a string, even the empty spaces.
+
+```{r}
+nchar("A string")   # 8
+```
+
+## Raw data type in R
+
+The raw data type holds raw bytes, so it is a very unusual data type.
+For instance, you could transform a character object or an integer numeric value to a raw object with the `charToRaw` and `intToBits` functions, respectively.
+```{r}
+a <- charToRaw("R CODER")
+
+a                  # 52 20 43 4f 44 45 52
+typeof(a)          # "raw"
+
+b <- intToBits(3L)
+typeof(b)
+is.raw(b)  #TRUE
+```
+
+## Date and Time data type in R
+
+A calendar date in R can be represented by using function as.Date(). The Date object has class of Date, for example,
+
+```{r}
+x <- c("14-08-1947", "06-09-1965")
+y <- c("23:03:20","22:29:56","01:03:30","18:21:03")
+d <- as.Date(x, "%d-%m-%Y")
+t <- strptime(y, "%H:%M:%S")
+format(d, "%d-%m-%Y")
+```
+
+
+Note that format() is used to set how date will be displayed. Furthermore, strptime() function is used to convert a certain character representation of a date and time into another representation.
+
+# Data types coercion in R
+
+You can coerce data types in R with the functions starting with as., summarized in the following table:
+| Function    | Coerced data type |
+|---|---|
+| as.numeric  | Numeric    |
+| as.integer    | Integer    |
+| as.double    | Double    |
+| as.character    | Character    |
+| as.logical    | Boolean    |
+| as.raw    | Raw    |
+
+
+### Double to integer
+```{r}
+a <- 3
+typeof(a)  #"double"
+
+a <- as.integer(a)
+typeof(a)  #"integer"
+
+```
+### Logical to Numeric/Character
+```{r}
+b <- TRUE
+b <- as.numeric(b)
+b # 1
+
+c <- FALSE
+c <- as.numeric(c)
+c # 0
+
+d <- TRUE
+d <- as.character(d)
+d # "TRUE"
+```
+
+### Invalid coercion example
+```{r}
+as.double("R CODER")
+```
+
+# Conclusion
+
+- Atomic data types form the foundation of R  programming and include numeric, character, logical, complex, and raw types.
+
+- Type checking can be performed using multiple functions (typeof(), class(), mode(), etc.), each providing different perspectives on an object's nature.
+
+- Numeric types are subdivided into double (default) and integer, with integers created using the L suffix.
+
+- Type coercion using as.*() functions allows flexible conversion between types, though incompatible conversions result in NA values.
+
+Best practices include using TRUE/FALSE instead of T/F and being cautious with automatic coercion to avoid unexpected results.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+
+
